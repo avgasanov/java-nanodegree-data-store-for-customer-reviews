@@ -1,22 +1,21 @@
-package com.udacity.course3.reviews.model;
+package com.udacity.course3.reviews.model.mongodb;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
-@Entity
-@Table(name = "products")
+@Document("products")
 public class Product {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     public Product() {
@@ -52,19 +51,15 @@ public class Product {
         this.reviews = reviews;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (o == null || getClass() != o.getClass()) return false;
-
         Product product = (Product) o;
-
-        return new EqualsBuilder()
-                .append(id, product.id)
-                .append(name, product.name)
-                .append(reviews, product.reviews)
-                .isEquals();
+        return Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(reviews, product.reviews);
     }
 
     @Override

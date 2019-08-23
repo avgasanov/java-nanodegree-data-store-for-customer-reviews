@@ -1,15 +1,12 @@
 package com.udacity.course3.reviews.controller;
 
-import com.udacity.course3.reviews.model.Comment;
-import com.udacity.course3.reviews.model.Review;
-import com.udacity.course3.reviews.repository.CommentRepo;
-import com.udacity.course3.reviews.repository.ProductRepo;
-import com.udacity.course3.reviews.repository.ReviewRepo;
+import com.udacity.course3.reviews.model.mongodb.Comment;
+import com.udacity.course3.reviews.model.mongodb.Review;
+import com.udacity.course3.reviews.repository.mongodb.CommentRepo;
+import com.udacity.course3.reviews.repository.mongodb.ReviewRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -46,7 +43,6 @@ public class CommentsController {
         if(!review.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        comment.setReview(review.get());
         Comment savedComment = commentRepo.save(comment);
         return new ResponseEntity<Comment>(savedComment, HttpStatus.OK);
     }

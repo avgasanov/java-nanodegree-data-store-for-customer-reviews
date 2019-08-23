@@ -1,27 +1,21 @@
-package com.udacity.course3.reviews.model;
+package com.udacity.course3.reviews.model.mongodb;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
-@Entity
-@Table(name = "reviews")
+@Document("reviews")
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String username;
 
-    @OneToMany
     private List<Comment> comments;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
 
     public Review() {
     }
@@ -30,7 +24,6 @@ public class Review {
         this.id = id;
         this.username = username;
         this.comments = comments;
-        this.product = product;
     }
 
     public Integer getId() {
@@ -57,28 +50,15 @@ public class Review {
         this.comments = comments;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (o == null || getClass() != o.getClass()) return false;
-
         Review review = (Review) o;
-
-        return new EqualsBuilder()
-                .append(id, review.id)
-                .append(username, review.username)
-                .append(comments, review.comments)
-                .append(product, review.product)
-                .isEquals();
+        return Objects.equals(id, review.id) &&
+                Objects.equals(username, review.username) &&
+                Objects.equals(comments, review.comments);
     }
 
     @Override
@@ -87,7 +67,6 @@ public class Review {
                 .append(id)
                 .append(username)
                 .append(comments)
-                .append(product)
                 .toHashCode();
     }
 
@@ -97,7 +76,6 @@ public class Review {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", comments=" + comments +
-                ", product=" + product +
                 '}';
     }
 }

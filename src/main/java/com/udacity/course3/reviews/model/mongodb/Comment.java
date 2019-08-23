@@ -1,23 +1,21 @@
-package com.udacity.course3.reviews.model;
+package com.udacity.course3.reviews.model.mongodb;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Entity
-@Table(name = "comments")
+@Document("comments")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String comment;
 
     private LocalDateTime timestamp;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "review_id", referencedColumnName = "id")
-    private Review review;
 
     public Comment() {
     }
@@ -26,7 +24,6 @@ public class Comment {
         this.id = id;
         this.comment = comment;
         this.timestamp = timestamp;
-        this.review = review;
     }
 
     public Integer getId() {
@@ -53,28 +50,15 @@ public class Comment {
         this.timestamp = timestamp;
     }
 
-    public Review getReview() {
-        return review;
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (o == null || getClass() != o.getClass()) return false;
-
         Comment comment1 = (Comment) o;
-
-        return new org.apache.commons.lang.builder.EqualsBuilder()
-                .append(id, comment1.id)
-                .append(comment, comment1.comment)
-                .append(timestamp, comment1.timestamp)
-                .append(review, comment1.review)
-                .isEquals();
+        return Objects.equals(id, comment1.id) &&
+                Objects.equals(comment, comment1.comment) &&
+                Objects.equals(timestamp, comment1.timestamp);
     }
 
     @Override
@@ -83,7 +67,6 @@ public class Comment {
                 .append(id)
                 .append(comment)
                 .append(timestamp)
-                .append(review)
                 .toHashCode();
     }
 
@@ -93,7 +76,6 @@ public class Comment {
                 "id=" + id +
                 ", comment='" + comment + '\'' +
                 ", timestamp=" + timestamp +
-                ", review=" + review +
                 '}';
     }
 }
