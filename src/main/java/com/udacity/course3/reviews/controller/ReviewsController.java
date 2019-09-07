@@ -56,7 +56,12 @@ public class ReviewsController {
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
     public ResponseEntity<List<?>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
-        return new ResponseEntity<>(
-                productRepo.findReviewById(productId), HttpStatus.OK);
+        Optional<Product> product = productRepo.findById(productId);
+        if(product.isPresent()) {
+            return new ResponseEntity<>(
+                    product.get().getReviews(),HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
